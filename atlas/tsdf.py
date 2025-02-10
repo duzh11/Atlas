@@ -387,7 +387,7 @@ class TSDFFusion():
         valid = (px >= 0) & (py >= 0) & (px < width) & (py < height) & (pz>0) # (nx*ny*nz)
 
         # voxels with valid depth
-        valid[valid] *= depth[py[valid], px[valid]]>0
+        valid[valid.clone()] *= depth[py[valid.clone()], px[valid.clone()]]>0
 
         # tsdf distance
         dist = pz[valid] - depth[py[valid], px[valid]] # (n1) (where n1 is # of in valid voxels)
@@ -395,7 +395,7 @@ class TSDFFusion():
 
         # mask out voxels beyond trucaction distance behind surface
         valid1 = dist<1
-        valid[valid] *= valid1
+        valid[valid.clone()] *= valid1
         dist = dist[valid1] # (n2) (where n2 is # of valid1 voxels)
 
         # where weight=0 copy in new values

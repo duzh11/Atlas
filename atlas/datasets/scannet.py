@@ -160,17 +160,16 @@ def prepare_scannet_splits(path, path_meta):
         ...
 
     """
-
-    os.makedirs('data', exist_ok=True)
-    splits = [('scannet_train.txt', 'scans', 'scannetv2_train.txt'), 
-              ('scannet_val.txt', 'scans', 'scannetv2_val.txt'),
-              ('scannet_test.txt', 'scans_test', 'scannetv2_test.txt'),
+    os.makedirs(path_meta, exist_ok=True)
+    splits = [('scannet_train.txt', 'ScanNet/Tasks/Benchmark', 'scannetv2_train.txt'), 
+              ('scannet_val.txt', 'ScanNet/Tasks/Benchmark', 'scannetv2_val.txt'),
+              ('scannet_test.txt', 'ScanNet/Tasks/Benchmark', 'scannetv2_test.txt'),
              ]
     for name, folder, fname in splits:
-        with open(os.path.join('data', name), 'w') as out_file:
-            scenes = [line.rstrip() for line in sorted(open(os.path.join(path, fname), 'r'))]
+        with open(os.path.join(path_meta, name), 'w') as out_file:
+            scenes = [line.rstrip() for line in sorted(open(os.path.join(path, folder, fname), 'r'))]
             for scene in scenes:
-                json_file = os.path.join(path_meta, folder, scene, 'info.json')
+                json_file = os.path.join(path_meta, scene, 'info.json')
                 out_file.write(json_file+'\n')
                 print(json_file)
 

@@ -85,7 +85,7 @@ def fuse_scene(path_meta, scene, voxel_size, trunc_ratio=3, max_depth=3,
     if len(dataset)<=200:
         dataset1 = dataset
     else:
-        inds = np.linspace(0,len(dataset)-1,200).astype(np.int)
+        inds = np.linspace(0,len(dataset)-1,200).astype(int)
         dataset1 = torch.utils.data.Subset(dataset, inds)
     dataloader1 = torch.utils.data.DataLoader(dataset1, batch_size=None,
                                               batch_sampler=None, num_workers=4)
@@ -242,8 +242,8 @@ def prepare_scannet(path, path_meta, i=0, n=1, test_only=False, max_depth=3):
     if not test_only:
         scenes += sorted([os.path.join('scans', scene) 
                           for scene in os.listdir(os.path.join(path, 'scans'))])
-    scenes += sorted([os.path.join('scans_test', scene)
-                      for scene in os.listdir(os.path.join(path, 'scans_test'))])
+    # scenes += sorted([os.path.join('scans_test', scene)
+    #                   for scene in os.listdir(os.path.join(path, 'scans_test'))])
 
     scenes = scenes[i::n]
 
@@ -303,11 +303,11 @@ def prepare_scannet(path, path_meta, i=0, n=1, test_only=False, max_depth=3):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Fuse ground truth tsdf on Scannet')
-    parser.add_argument("--path", required=True, metavar="DIR",
+    parser.add_argument("--path", metavar="DIR", default = '/home/du/Proj/Dataset/ScanNet',
         help="path to raw dataset")
-    parser.add_argument("--path_meta", required=True, metavar="DIR",
+    parser.add_argument("--path_meta", metavar="DIR", default = './data',
         help="path to store processed (derived) dataset")
-    parser.add_argument("--dataset", required=True, type=str,
+    parser.add_argument("--dataset", type=str,  default = 'scannet',
         help="which dataset to prepare")
     parser.add_argument('--i', default=0, type=int,
         help='index of part for parallel processing')
@@ -335,7 +335,7 @@ if __name__ == "__main__":
 
     elif args.dataset == 'scannet':
         prepare_scannet(
-            os.path.join(args.path, 'scannet'),
+            args.path,
             os.path.join(args.path_meta, 'scannet'),
             i,
             n,
